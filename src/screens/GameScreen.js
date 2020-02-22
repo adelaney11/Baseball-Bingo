@@ -1,79 +1,62 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import BingoCard from '../components/BingoCard';
-import BingoButton from '../components/BingoButton';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import Button from '../components/BingoButton';
+
+export default class GameScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      pregeneratedValues: ['SOS', 'E', '8', '7', '6', 'SOL', '5', '9', '4', '3', '2', '6 TO 3', '4 TO 3', '5 TO 3', '6 TO 4', '4 TO 6', 'DP', 'RPLY -'], // array of your values
+      array: [] // What's on the generated card from forLoopDoes24Times in componentDidMount
+    };
+  }
+
+  // LIFECYCLE METHODS
+  // Before the render function below renders for the first time, this will happen
+  componentDidMount() {
+    // We want to populate our empty array in state above
+    this.forLoopDoes24Times();
+  }
+  componentDidUpdate(prevState) {
+    // After forLoopDoes24Times has been run, if the old state and new state don't match, log the new state
+    if (prevState.array !== this.state.array) {
+      console.log("New Array: ", this.state.array);
+    }
+  }
+
+  forLoopDoes24Times = () => {
+    // We cannot update the state directly, so we copy the current state, which is empty
+    const newArray = [...this.state.array];
+
+    // Generate a random number 25 times and push the value to the newArray
+    // For your project, select random value from pregeneratedValues 25 times
+    for (i = 0; i < 24; i++) {
+      const randomVal = Math.random(); // This is what needs to change
+      newArray.push(randomVal);
+    }
+
+    // Update the state
+    this.setState({
+      array: newArray
+    });
+  };
+
+  // For each button, get item value and index as i
+  renderButton = (item, i) => {
+    return <Button item={item} key={i} />;
+  };
+
+  // render() {} must be called on every class component
+  render() {
+    return (
+      <React.Fragment>
+        {/* Comment: for each value in this.state.value, create a button (mapping) for each value  */}
+        {/* Below we aren't really calling the function, we are referencing the function */}
+        {this.state.array.map(this.renderButton)}
+      </React.Fragment>
+    );
+  }
+}
 
 
-
-
-const GameScreen = props => {
-
-    return(
-        <View style = {styles.container}>
-            <TouchableOpacity 
-            style = {{alignSelf: 'flex-end', paddingRight: 10}}
-            onPress = {() => props.navigation.navigate('Help')}>
-                <View style = {{backgroundColor: 'yellow'}}>
-                    <Text>
-                        HELP
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            
-            <Text style = {{fontSize: 45, color: 'beige'}}>Baseball Bingo</Text>
-
-            <View style = {styles.card}>
-               <BingoButton tapID = '1'></BingoButton>
-               <BingoButton tapID = '2'></BingoButton>
-               <BingoButton tapID = '3'></BingoButton>
-               <BingoButton tapID = '4'></BingoButton>
-               <BingoButton tapID = '5'></BingoButton>
-
-               <BingoButton tapID = '6'></BingoButton>
-               <BingoButton tapID = '7'></BingoButton>
-               <BingoButton tapID = '8'></BingoButton>
-               <BingoButton tapID = '9'></BingoButton>
-               <BingoButton tapID = '10'></BingoButton>
-               
-               <BingoButton tapID = '11'></BingoButton>
-               <BingoButton tapID = '12'></BingoButton>
-               <BingoButton tapID = '13'></BingoButton>
-               <BingoButton tapID = '14'></BingoButton>
-               <BingoButton tapID = '15'></BingoButton>
-
-               <BingoButton tapID = '16'></BingoButton>
-               <BingoButton tapID = '17'></BingoButton>
-               <BingoButton tapID = '18'></BingoButton>
-               <BingoButton tapID = '19'></BingoButton>
-               <BingoButton tapID = '20'></BingoButton>
-
-               <BingoButton tapID = '21'></BingoButton>
-               <BingoButton tapID = '22'></BingoButton>
-               <BingoButton tapID = '23'></BingoButton>
-               <BingoButton tapID = '24'></BingoButton>
-               <BingoButton tapID = '25'></BingoButton>
-               
-            </View>
-        </View>
-        
-    )
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: '#29802d'
-      },
-      card: {
-        alignItems: 'center',
-        backgroundColor: '#29802d',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        alignContent: 'space-between',
-        justifyContent: 'center'
-      }
-});
-
-export default GameScreen;
