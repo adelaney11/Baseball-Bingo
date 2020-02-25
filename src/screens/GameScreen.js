@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
 import Button from '../components/BingoButton';
 
 export default class GameScreen extends Component {
@@ -15,7 +15,7 @@ export default class GameScreen extends Component {
   // LIFECYCLE METHODS
   // Before the render function below renders for the first time, this will happen
   componentDidMount() {
-    // We want to populate our empty array in state above
+    // Want to populate empty array in state above
     this.forLoopDoes24Times();
   }
   componentDidUpdate(prevState) {
@@ -26,13 +26,13 @@ export default class GameScreen extends Component {
   }
 
   forLoopDoes24Times = () => {
-    // We cannot update the state directly, so we copy the current state, which is empty
+    // Cannot update the state directly, so copy the current state, which is empty
     const newArray = [...this.state.array];
 
     // Generate a random number 25 times and push the value to the newArray
-    // For your project, select random value from pregeneratedValues 25 times
+    // Or for this project, select random value from pregeneratedValues 25 times
     for (i = 0; i < 24; i++) {
-      const randomVal = Math.random(); // This is what needs to change
+      const randomVal = Math.random(); // CHANGE THIS
       newArray.push(randomVal);
     }
 
@@ -50,13 +50,36 @@ export default class GameScreen extends Component {
   // render() {} must be called on every class component
   render() {
     return (
-      <React.Fragment>
-        {/* Comment: for each value in this.state.value, create a button (mapping) for each value  */}
-        {/* Below we aren't really calling the function, we are referencing the function */}
-        {this.state.array.map(this.renderButton)}
-      </React.Fragment>
+      <View style = {styles.container}>
+        
+        
+        <View style = {styles.card}>
+          <React.Fragment>
+            {/* Comment: for each value in this.state.value, create a button (mapping) for each value  */}
+            {/* Below we aren't really calling the function, we are referencing the function */}
+            {this.state.array.map(this.renderButton)}
+          </React.Fragment>
+        </View>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: '#29802d'
+    },
+    card: {
+      alignItems: 'center',
+      backgroundColor: '#29802d',
+      flexWrap: 'wrap',
+      flexDirection: 'row',
+      alignContent: 'space-between',
+      justifyContent: 'center'
+    }
+});
 
 
