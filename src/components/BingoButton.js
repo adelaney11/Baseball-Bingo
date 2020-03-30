@@ -6,7 +6,8 @@ export default class Container extends Component {
     super(props);
 
     this.state = {
-      isSelected: false
+      isSelected: false,
+      color: 'white'
     };
   }
 
@@ -20,6 +21,11 @@ export default class Container extends Component {
     this.setState({
       isSelected: !this.state.isSelected
     });
+    if (this.state.color == 'white') {
+      this.state.color = 'grey';
+    } else {
+      this.state.color = 'white';
+    }
   };
 
   render() {
@@ -27,7 +33,7 @@ export default class Container extends Component {
     return (
       <TouchableHighlight key={key} onPress={() => this.toggleSelected()}>
         <View style = {{
-                backgroundColor: 'white',
+                backgroundColor: this.state.color,
                 width: (Dimensions.get('window').width / 5) - 10,
                 height: 80,
                 borderColor: 'black',
