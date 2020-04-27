@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
       marginTop: 200,
       alignSelf: 'center',
       color: 'black',
-      fontFamily: 'Verdana-Bold',
+      fontFamily: 'Avenir-BookOblique',
   
     },
     button: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
       padding: 20,
       color: 'black',
       fontSize: 24,
-      fontFamily: 'Verdana-Bold'
+      fontFamily: 'Avenir-BookOblique'
     }
   });
 

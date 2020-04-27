@@ -7,13 +7,14 @@ export default class Container extends Component {
 
     this.state = {
       isSelected: false,
-      color: 'white'
+      color: 'white',
     };
   }
 
   componentDidUpdate(prevState) {
     if (prevState.isSelected !== this.state.isSelected) {
       console.log("State Updated: isSelected - ", this.state.isSelected);
+      console.log(this.props["index"]);
     }
   }
 
@@ -22,10 +23,13 @@ export default class Container extends Component {
       isSelected: !this.state.isSelected
     });
     if (this.state.color == 'white') {
+      this.props.addPlay(this.props["index"]);
       this.state.color = 'grey';
     } else {
+      this.props.removePlay(this.props["index"]);
       this.state.color = 'white';
     }
+
   };
 
   render() {
@@ -40,7 +44,7 @@ export default class Container extends Component {
                 borderWidth: 2,
                 justifyContent: 'center',
                 }}>
-          <Text style = {{alignSelf: 'center'}}>{item}</Text>
+          <Text style = {{alignSelf: 'center', fontFamily: 'Avenir-BookOblique'}}>{item}</Text>
         </View>
       </TouchableHighlight>
     );

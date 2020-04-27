@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, Alert} from 'react-native';
 import Button from '../components/BingoButton';
+
+const wins = [
+  [0,4,20,24],
+  [0,5,10,15,20],
+  [1, 6, 11, 16, 21],
+  [2, 7, 12, 17, 22],
+  [23, 18, 13, 8, 3],
+  [4, 9, 14, 19, 24],
+  [0, 1, 2, 3, 4],
+  [5, 6, 7, 8, 9],
+  [10, 11, 12, 13, 14],
+  [19, 18, 17, 16, 15],
+  [24, 23, 22, 21, 20],
+  [0, 6, 12, 18, 24],
+  [20, 16, 12, 8, 4]
+];
 
 export default class GameScreen extends Component {
   constructor(props) {
@@ -12,8 +28,26 @@ export default class GameScreen extends Component {
       dataC: ['1B', '2B', 'HR', 'BB', '1 RBI', '2 RBI', 'SAC F', 'RPLY +'],
       dataD: ['3B', 'SB', '3 RBI', 'SAC B', 'PB', 'WP'],
       dataE: ['IBB', 'HBP', 'GS', 'OUT A', 'RD', 'D3K', 'BK', 'IFLY', 'P-OUT'],// array of values
-      array: [] // What's on the generated card from forLoopDoes24Times in componentDidMount
+      array: [], // What's on the generated card from forLoopDoes24Times in componentDidMount
+      marked: [],
     };
+    this.addPlay = this.addPlay.bind(this);
+    this.removePlay = this.removePlay.bind(this);
+
+    const createTwoButtonAlert = () =>
+    Alert.alert(
+      "Alert Title",
+      "My Alert Msg",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
   }
 
   // LIFECYCLE METHODS
@@ -26,6 +60,24 @@ export default class GameScreen extends Component {
     // After forLoopDoes24Times has been run, if the old state and new state don't match, log the new state
     if (prevState.array !== this.state.array) {
       console.log("New Array: ", this.state.array);
+    }
+    if (prevState.marked !== this.state.marked) {
+      console.log("Marked: ", this.state.marked);
+      if (this.state.marked.length == 4) {
+        this.checkForWin(wins[0]);
+      } else if (this.state.marked.length >= 5) {
+        var i;
+        for (i = 0; i < wins.length; i++){
+          this.checkForWin(wins[i])
+        }
+      }
+    }
+  }
+
+  shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
   }
 
@@ -53,6 +105,7 @@ export default class GameScreen extends Component {
     } 
     else {
       newArray.push(randomItem);
+      this.shuffle(newArray);
     }
   }
 
@@ -87,9 +140,42 @@ export default class GameScreen extends Component {
     });
   };
 
+  addPlay(index){
+    const newMarked = [...this.state.marked];
+    if(newMarked.indexOf(index) !== -1){
+      return;
+    } else {
+      newMarked.push(index);
+    }
+    this.setState({
+        array: this.state.array,
+        marked: newMarked,
+      });
+  }
+
+  removePlay(index){
+    const newMarked = [...this.state.marked];
+    if(newMarked.indexOf(index) == -1){
+      return;
+    } else {
+      newMarked.splice( newMarked.indexOf(index), 1);
+    }
+    this.setState({
+      array: this.state.array,
+      marked: newMarked,
+    });
+  }
+
+  checkForWin(wins){
+    const result = this.state.marked.every(val => wins.includes(val));
+    if (result == true){
+      console.log("WIN!!!!")      
+    }
+  };
+
   // For each button, get item value and index as i
   renderButton = (item, i) => {
-    return <Button item={item} key={i} />;
+    return <Button item={item} key={i} index = {i} addPlay = {this.addPlay} removePlay = {this.removePlay} />;
   };
 
   // render() {} must be called on every class component
