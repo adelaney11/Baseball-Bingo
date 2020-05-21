@@ -14,7 +14,7 @@ export default class Container extends Component {
   componentDidUpdate(prevState) {
     if (prevState.isSelected !== this.state.isSelected) {
       console.log("State Updated: isSelected - ", this.state.isSelected);
-      console.log(this.props["index"]);
+      console.log(this.props["item"]);
     }
   }
 

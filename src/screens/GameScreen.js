@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Alert} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Button from '../components/BingoButton';
 
 const wins = [
@@ -29,32 +29,17 @@ export default class GameScreen extends Component {
       dataD: ['3B', 'SB', '3 RBI', 'SAC B', 'PB', 'WP'],
       dataE: ['IBB', 'HBP', 'GS', 'OUT A', 'RD', 'D3K', 'BK', 'IFLY', 'P-OUT'],// array of values
       array: [], // What's on the generated card from forLoopDoes24Times in componentDidMount
-      marked: [],
+      marked: [], // marked plays
     };
     this.addPlay = this.addPlay.bind(this);
     this.removePlay = this.removePlay.bind(this);
-
-    const createTwoButtonAlert = () =>
-    Alert.alert(
-      "Alert Title",
-      "My Alert Msg",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ],
-      { cancelable: false }
-    );
   }
 
   // LIFECYCLE METHODS
   // Before the render function below renders for the first time, this will happen
   componentDidMount() {
     // Want to populate empty array in state above
-    this.forLoopDoes25Times();
+    this.newBoard();
   }
   componentDidUpdate(prevState) {
     // After forLoopDoes24Times has been run, if the old state and new state don't match, log the new state
@@ -81,6 +66,7 @@ export default class GameScreen extends Component {
     }
   }
 
+  // function to get the plays from their respective dataArrays (which are based on probability)
   getBingoButton(dataArray, newArray) {
     var randomItem;
     switch (dataArray){
@@ -109,12 +95,15 @@ export default class GameScreen extends Component {
     }
   }
 
-  forLoopDoes25Times = () => {
-    // Cannot update the state directly, so copy the current state, which is empty
-    const newArray = [...this.state.array];
+  newBoard(){
+    // empty the state
+    this.setState({
+      array: [],
+      marked: []
+    });
 
-    // Generate a random number 25 times and push the value to the newArray
-    // Or for this project, select random value from pregeneratedValues 25 times
+    // fill the board
+    const newArray =[]
     while (newArray.length <= 10) {
       this.getBingoButton(this.state.dataA, newArray);
     }
@@ -134,12 +123,15 @@ export default class GameScreen extends Component {
       this.getBingoButton(this.state.dataE, newArray);
     }
 
-    // Update the state
+    // update the state
     this.setState({
-      array: newArray
+      array: newArray,
+      marked: []
     });
-  };
+  }
 
+  
+  //add play to 
   addPlay(index){
     const newMarked = [...this.state.marked];
     if(newMarked.indexOf(index) !== -1){
@@ -158,7 +150,7 @@ export default class GameScreen extends Component {
     if(newMarked.indexOf(index) == -1){
       return;
     } else {
-      newMarked.splice( newMarked.indexOf(index), 1);
+      newMarked.splice(newMarked.indexOf(index), 1);
     }
     this.setState({
       array: this.state.array,
@@ -166,10 +158,41 @@ export default class GameScreen extends Component {
     });
   }
 
+  createTwoButtonAlert = () =>
+  Alert.alert(
+    "Bingo!",
+    "You've won! Now what?",
+    [
+      {
+        text: "Continue",
+        onPress: () => this.newBoard(),
+        style: "cancel"
+      },
+      { text: "New Board", onPress: () => this.newBoard() }
+    ],
+    { cancelable: false }
+  );
+
+  newBoardConfirmAlert = () =>
+  Alert.alert(
+    "Are you sure you want a new board?",
+    "You will lose any progress towards your current Bingo.",
+    [
+      {
+        text: "Cancel",
+        onPress: console.log("cancelled"),
+        style: "cancel"
+      },
+      { text: "New Board", onPress: () => this.newBoard() }
+    ],
+    { cancelable: false }
+  );
+
   checkForWin(wins){
-    const result = this.state.marked.every(val => wins.includes(val));
+    const result = wins.every(val => this.state.marked.indexOf(val) !== -1);
     if (result == true){
-      console.log("WIN!!!!")      
+      console.log("WIN!!!!")
+      this.createTwoButtonAlert()
     }
   };
 
@@ -182,8 +205,20 @@ export default class GameScreen extends Component {
   render() {
     return (
       <View style = {styles.container}>
-        
-        
+        <View style = {styles.helpContainer}>
+          <TouchableOpacity 
+          onPress = {() => this.newBoardConfirmAlert()}>
+            <View>
+              <Text>NEW BINGO BOARD</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity 
+          onPress={() => this.props.navigation.navigate('Help')}>
+            <View>
+              <Text>HELP</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
         <View style = {styles.card}>
           <React.Fragment>
             {/* Comment: for each value in this.state.value, create a button (mapping) for each value  */}
@@ -200,16 +235,22 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
       flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: '#29802d'
+    },
+    helpContainer: {
+      flex: .2,
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#29802d'
     },
     card: {
+      flex: .8,
       alignItems: 'center',
       backgroundColor: '#29802d',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      alignContent: 'space-between',
       justifyContent: 'center'
     }
 });

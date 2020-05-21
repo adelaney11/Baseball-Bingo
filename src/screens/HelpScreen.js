@@ -48,6 +48,60 @@ const glossary = [
     {
         title: 'E = Error'
     },
+    {
+        title: 'HBP = Hit By Pitch'
+    },
+    {
+        title: 'OUT A = Outfield Assist'
+    },
+    {
+        title: 'BK = Balk'
+    },
+    {
+        title: 'P-OUT = Pitch Out'
+    },
+    {
+        title: 'SAC B = Sacrifice Bunt'
+    },
+    {
+        title: 'IFLY = Infield Fly'
+    },
+    {
+        title: 'D3K = Dropped 3rd Strike'
+    },
+    {
+        title: 'RD = Rundown'
+    },
+    {
+        title: 'SAC F = Sacrifice Fly'
+    },
+    {
+        title: 'SOL = Strike Out Looking'
+    },
+    {
+        title: 'EXAMPLES OF DEFENSIVE PLAYS AND MORE:'
+    },
+    {
+        title: '4 TO 3 = 2nd Base to 1st Base'
+    },
+    {
+        title: '6 TO 4 = ShortStop to 2nd Base'
+    },
+    {
+        title: '3 TO 1 = 1st Base to Pitcher' 
+    },
+    {
+        title: 'RPLY- = Team Asks for Replay and Loses Challenge'
+    },
+    {
+        title: 'RPLY+ = Team Asks for Replay and Wins Challenge'
+    },
+    {
+        title: '8 = Fly Out to 8 (Center Field)'
+    },
+    {
+        title: '2 = Fly Out to 2 (Catcher)'
+    },
 ];
 
 const gameDetails = [
@@ -55,7 +109,10 @@ const gameDetails = [
         title: 'HOW TO PLAY:'
     },
     {
-        title: 'One square per play. For example, if a home run is hit, choose HR or RBI, but not both. 6 to 4 to 3 Double Play can be DP, 6 to 4, or 4 to 3.'
+        title: 'Classic rules of Bingo, BUT...'
+    },
+    {
+        title: 'One square per play. If a home run is hit, choose HR or RBI, but not both. 6 to 4 to 3 Double Play can be DP, 6 to 4, or 4 to 3.'
     },
     {
         title: '--------------------------'
@@ -64,7 +121,13 @@ const gameDetails = [
         title: 'HOW TO WIN:'
     },
     {
-        title: '5 squares in a row (column, row, or diagonal) OR 4 corners.'
+        title: 'Match 5 squares in a row (column, row, or diagonal)'
+    },
+    {
+        title: 'OR'
+    },
+    {
+        title: 'get all 4 corners.'
     }
 ];
 
@@ -113,8 +176,9 @@ const styles = StyleSheet.create({
     },
     lists: {
         flexDirection: 'row',
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginBottom: 25,
     },
     helpText: {
         color: 'beige',
