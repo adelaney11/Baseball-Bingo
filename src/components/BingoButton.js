@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, Text, View, Dimensions} from 'react-native';
+import { Image, TouchableHighlight, Text, View, Dimensions} from 'react-native';
 
 export default class Container extends Component {
   constructor(props) {
@@ -44,7 +44,20 @@ export default class Container extends Component {
                 borderWidth: 2,
                 justifyContent: 'center',
                 }}>
-          <Text style = {{alignSelf: 'center', fontFamily: 'Avenir-BookOblique'}}>{item}</Text>
+          <Text style = {{alignSelf: 'center', fontFamily: 'Rockwell'}}>{item}</Text>
+          {
+          this.state.isSelected && <Image
+            style = {{
+              resizeMode: 'contain',
+              backgroundColor: 'transparent',
+              position: 'absolute',
+              height: 80,
+              width: (Dimensions.get('window').width / 5) - 15,
+              opacity: .45
+            }}
+            source = {require('../assets/baseballclipart.png')}
+            />
+          }
         </View>
       </TouchableHighlight>
     );

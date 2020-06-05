@@ -4,9 +4,6 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList} 
 
 const glossary = [
     {
-        title: 'ABBREVIATIONS:'
-    },
-    {
         title: '1B = Single'
     },
     {
@@ -135,28 +132,20 @@ const HelpScreen = props => {
     return (
         <View style = {styles.container}>
             <Image 
-            style = {styles.image}
-            source = {require('../assets/bbingoplays.png')} />
-            <View style = {styles.lists}>
-                <FlatList 
-                style = {{flex: .5}}
-                data = {glossary}
-                renderItem = {({item}) => (
-                    <Text style = {styles.helpText}>
-                        {item.title}
-                    </Text>
-                )}
-                keyExtractor = {item => item.title}
-                />
+                style = {styles.image}
+                source = {require('../assets/bbingoplays.png')} />      
+            <View style = {styles.helpView}>
+                <Text style = {styles.helpText}>
+                    PLAYS & ABBREVIATIONS
+                </Text>
                 <FlatList
-                style = {{flex: .5}}
-                data = {gameDetails}
-                renderItem = {({item}) => (
-                    <Text style = {styles.helpText}>
-                        {item.title}
-                    </Text>
-                )}
-                keyExtractor = {item => item.title}
+                    data = {glossary}
+                    renderItem={({ item }) => (
+                        <Text style = {styles.helpText}>
+                            {item.title}
+                        </Text>
+                    )}
+                    keyExtractor={item => item.title}
                 />
             </View>
         </View>
@@ -166,24 +155,28 @@ const HelpScreen = props => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#29802d'
+        backgroundColor: '#11873B'
       },
     image: {
+        height: Dimensions.get('window').height * .45,
         width: Dimensions.get('window').width,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
-    lists: {
-        flexDirection: 'row',
-        paddingLeft: 15,
-        paddingRight: 15,
-        marginBottom: 25,
+    helpView: {
+        flex: 2,
+        alignSelf: 'center',
+        backgroundColor: '#BF8A52',
+        borderRadius: 20,
+        padding: 15,
+        marginBottom: 10
     },
     helpText: {
-        color: 'beige',
+        fontFamily: 'Rockwell',
+        color: 'black',
         fontSize: 16,
         fontWeight: "500",
+        padding: 5,
     }
 
 });

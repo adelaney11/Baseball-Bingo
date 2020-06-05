@@ -1,18 +1,34 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { Image, View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 
 const HomeScreen = props => {
     return (
       <View style={styles.container}>
           <View>
-            <Text style = {styles.title}>Baseball Bingo!</Text>
+          <Image
+                style = {{
+                  resizeMode: 'contain',
+                  backgroundColor: 'transparent',
+                  height: 250,
+                  width: 250,
+                  marginTop: Dimensions.get('window').height * .10,
+                  alignSelf: "center",
+                }}
+                source = {require('../assets/title.png')}
+              />
           </View>
           <TouchableOpacity 
-          style = {{marginTop: 200}}
-          onPress={() => props.navigation.navigate('Game')}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>PLAY</Text>
-            </View>
+            onPress={() => props.navigation.navigate('Game')}>
+            <Image
+                style = {{
+                  resizeMode: 'contain',
+                  backgroundColor: 'transparent',
+                  height: 200,
+                  width: 200,
+                  alignSelf: "center",
+                }}
+                source = {require('../assets/playbutton.png')}
+              />
           </TouchableOpacity>
       </View> 
     )
@@ -24,7 +40,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
-      backgroundColor: '#29802d'
+      backgroundColor: '#11873B'
     },
     title: {
       fontSize: 44,

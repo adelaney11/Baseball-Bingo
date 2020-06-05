@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import { View, Text, Image,  StyleSheet, TouchableOpacity, Alert, Dimensions} from 'react-native';
 import Button from '../components/BingoButton';
 
-const wins = [
+const possibleWins = [
   [0,4,20,24],
   [0,5,10,15,20],
   [1, 6, 11, 16, 21],
@@ -18,6 +18,7 @@ const wins = [
   [20, 16, 12, 8, 4]
 ];
 
+
 export default class GameScreen extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +31,7 @@ export default class GameScreen extends Component {
       dataE: ['IBB', 'HBP', 'GS', 'OUT A', 'RD', 'D3K', 'BK', 'IFLY', 'P-OUT'],// array of values
       array: [], // What's on the generated card from forLoopDoes24Times in componentDidMount
       marked: [], // marked plays
+      wins: []
     };
     this.addPlay = this.addPlay.bind(this);
     this.removePlay = this.removePlay.bind(this);
@@ -48,12 +50,13 @@ export default class GameScreen extends Component {
     }
     if (prevState.marked !== this.state.marked) {
       console.log("Marked: ", this.state.marked);
+      console.log("Wins: ", this.state.wins)
       if (this.state.marked.length == 4) {
-        this.checkForWin(wins[0]);
+        this.checkForWin(possibleWins[0]);
       } else if (this.state.marked.length >= 5) {
         var i;
-        for (i = 0; i < wins.length; i++){
-          this.checkForWin(wins[i])
+        for (i = 0; i < possibleWins.length; i++){
+          this.checkForWin(possibleWins[i]);
         }
       }
     }
@@ -99,10 +102,11 @@ export default class GameScreen extends Component {
     // empty the state
     this.setState({
       array: [],
-      marked: []
+      marked: [],
+      wins: []
     });
 
-    // fill the board
+    // fill the board and empty current wins (if any)
     const newArray =[]
     while (newArray.length <= 10) {
       this.getBingoButton(this.state.dataA, newArray);
@@ -158,6 +162,19 @@ export default class GameScreen extends Component {
     });
   }
 
+  addWin(win){
+    const newWins = [...this.state.wins];
+    if(newWins.indexOf(win) !== -1){
+      return;
+    } else {
+      newWins.push(win);
+    }
+    this.setState({
+        array: this.state.array,
+        wins: newWins,
+      });
+  }
+
   createTwoButtonAlert = () =>
   Alert.alert(
     "Bingo!",
@@ -165,7 +182,7 @@ export default class GameScreen extends Component {
     [
       {
         text: "Continue",
-        onPress: () => this.newBoard(),
+        onPress: () => console.log("continued game"),
         style: "cancel"
       },
       { text: "New Board", onPress: () => this.newBoard() }
@@ -188,11 +205,25 @@ export default class GameScreen extends Component {
     { cancelable: false }
   );
 
-  checkForWin(wins){
-    const result = wins.every(val => this.state.marked.indexOf(val) !== -1);
-    if (result == true){
-      console.log("WIN!!!!")
-      this.createTwoButtonAlert()
+  isArrayInArray(arr, item){
+    var item_as_string = JSON.stringify(item);
+  
+    var contains = arr.some(function(ele){
+      return JSON.stringify(ele) === item_as_string;
+    });
+    return contains;
+  }
+
+  checkForWin(possibleWins){
+    const result = possibleWins.every(val => this.state.marked.indexOf(val) !== -1);
+    var win = possibleWins.filter((val) => { return possibleWins.every(val => this.state.marked.indexOf(val) !== -1);});
+
+    const alreadyWon = this.isArrayInArray(this.state.wins, win)
+
+    if (result == true && alreadyWon == false){
+      console.log("WIN!!!!");
+      this.createTwoButtonAlert();
+      this.addWin(win);
     }
   };
 
@@ -209,13 +240,29 @@ export default class GameScreen extends Component {
           <TouchableOpacity 
           onPress = {() => this.newBoardConfirmAlert()}>
             <View>
-              <Text>NEW BINGO BOARD</Text>
+              <Image
+                style = {{
+                  resizeMode: 'contain',
+                  backgroundColor: 'transparent',
+                  height: 100,
+                  width: 100,
+                }}
+                source = {require('../assets/newboardbutton.png')}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity 
           onPress={() => this.props.navigation.navigate('Help')}>
             <View>
-              <Text>HELP</Text>
+              <Image
+                style = {{
+                  resizeMode: 'contain',
+                  backgroundColor: 'transparent',
+                  height: 100,
+                  width: 100,
+                }}
+                source = {require('../assets/helpbutton.png')}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -236,22 +283,21 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
-      backgroundColor: '#29802d'
+      backgroundColor: '#11873B'
     },
     helpContainer: {
-      flex: .2,
+      flex: 1,
       flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#29802d'
+      backgroundColor: '#11873B',
+      marginTop: Dimensions.get('window').height * .05
     },
     card: {
-      flex: .8,
+      flex: 4,
       alignItems: 'center',
-      backgroundColor: '#29802d',
+      backgroundColor: '#11873B',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      justifyContent: 'center'
+      justifyContent: 'center',
     }
 });
 
