@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Rockwell',
         color: 'black',
         fontSize: 16,
-        fontWeight: "500",
+        fontWeight: "600",
         padding: 5,
     }
 
