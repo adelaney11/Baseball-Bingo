@@ -135,7 +135,19 @@ const HelpScreen = props => {
                 style = {styles.image}
                 source = {require('../assets/bbingoplays.png')} />      
             <View style = {styles.helpView}>
-                <Text style = {styles.helpText}>
+                <Text style = {styles.helpTextTitle}>
+                    RULES
+                </Text>
+                <FlatList
+                    data = {gameDetails}
+                    renderItem={({ item }) => (
+                        <Text style = {styles.helpText}>
+                            {item.title}
+                        </Text>
+                    )}
+                    keyExtractor={item => item.title}
+                />
+                <Text style = {styles.helpTextTitle}>
                     PLAYS & ABBREVIATIONS
                 </Text>
                 <FlatList
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#11873B'
       },
     image: {
-        height: Dimensions.get('window').height * .45,
+        height: Dimensions.get('window').height * .35,
         width: Dimensions.get('window').width,
         resizeMode: 'contain',
     },
@@ -169,7 +181,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#BF8A52',
         borderRadius: 20,
         padding: 15,
-        marginBottom: 10
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    helpTextTitle: {
+        fontFamily: 'Rockwell',
+        color: 'black',
+        fontSize: 16,
+        fontWeight: "700",
+        padding: 5,
     },
     helpText: {
         fontFamily: 'Rockwell',
